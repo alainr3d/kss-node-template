@@ -11,17 +11,19 @@
     <!--[if lt IE 9]>
     <script src="public/html5shiv.js"></script>
     <![endif]-->
+    <script src="public/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="public/mustache.min.js"></script>
   </head>
   <body id="kss-node">
     <div class="kss-wrapper">
       <div class="kss-sidebar">
         <div class="kss-sidebar-inner">
           <header class="kss-header">
-            <h1 class="kss-doc-title"><a href="./">UI Style Guide</a></h1>
+            <h1 class="kss-doc-title"><a href="./index.html">UI Style Guide</a></h1>
           </header>
           <nav class="kss-nav">
             <ul class="kss-menu" data-kss-ref="{{rootNumber}}">
-              <li class="kss-menu-item"><a href="./"><span class="kss-ref">0</span><span class="kss-name">Overview</span></a></li>
+              <li class="kss-menu-item"><a href="./index.html"><span class="kss-ref">0</span><span class="kss-name">Overview</span></a></li>
               {{#eachRoot}}
               <li class="kss-menu-item"><a href="section-{{reference}}.html"><span class="kss-ref">{{reference}}</span><span class="kss-name">{{header}}</span></a></li>
               {{/eachRoot}}
@@ -59,7 +61,23 @@
             <div class="kss-modifier-block">
               <div class="kss-modifier kss-modifier-original">
                 <div class="kss-modifier-example">
-                  {{modifierMarkup}}
+                <!--responsive template-->
+                    <div class="mu-template">
+                      <span class="mu-label">320</span>
+                      <iframe class="mu-iframe" width="320px" frameborder="0" scrolling="no" ></iframe>
+                      <script class="mu-scripttemplate" type="text/template">
+                        {{modifierMarkup}}
+                      </script>
+                    </div>
+
+                    <div class="mu-template">
+                      <span class="mu-label">768</span>
+                      <iframe class="mu-iframe" width="768px" frameborder="0" scrolling="no" ></iframe>
+                      <script class="mu-scripttemplate" type="text/template">
+                        {{modifierMarkup}}
+                      </script>
+                    </div>
+
                 </div>
               </div>
               {{#eachModifier}}
@@ -95,11 +113,55 @@
         </footer>
       </div>
     </div>
+    <style>
+    .mu-label{
+      vertical-align: top;
+      font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+      color:#cccccc;
+      font-weight: normal;
+
+    }
+    .mu-iframe{
+      border: 1px solid #cccccc;
+    }
+    </style>
+    <script type="text/javascript">
+      (function(){
+
+        var $allTemplates = $('.mu-template');
+        window.all = $allTemplates;
+
+        for (var i = 0; i < $allTemplates.length; i++) {
+
+            var $template = $($allTemplates[i]);
+
+            var $frame = $template.find('.mu-iframe');
+            var $scriptTemplate = $template.find('.mu-scripttemplate');
+
+            //get link tags
+            var allLinks = '';
+
+            $('link').each(function(link){
+              allLinks = allLinks + this.outerHTML
+            });
+
+            $frame.get()[0].contentWindow.document.write(allLinks + $scriptTemplate.html());
+
+            $frame.css('height', $frame.get()[0].contentWindow.document.body.scrollHeight + 'px');
+
+        };
+
+
+      })();
+      
+    </script>
     <script src="public/kss.js"></script>
-    <script src="public/jquery-1.9.1.min.js"></script>
     <!--[if gt IE 8]><!-->
     <script src="public/rainbow.min.js"></script>
     <!--<![endif]-->
     <script src="public/main.js"></script>
+
+
+    <script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
   </body>
 </html>
